@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>スプラッシュdemo</title>
+
+    <style>
+      @charset "UTF-8";
+      /*------------------------------------------------------------------------------
+  reset
+------------------------------------------------------------------------------*/
+      @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
+      :root {
+        --easing: cubic-bezier(0.2, 1, 0.2, 1);
+        --transition: 0.8s var(--easing);
+        --color-base: #f8f8f8;
+        --color-gray: #ddd;
+        --color-theme: #000;
+        --color-theme-darken: #f12617;
+        --box-shadow: 0.8rem 0.8rem 1.2rem rgba(0, 0, 0, 0.05),
+          -0.8rem -0.8rem 1.2rem #fff;
+        --box-shadow-hover: 1rem 1rem 1.5rem rgba(0, 0, 0, 0.08),
+          -1rem -1rem 1.5rem #fff;
+        --box-shadow-inset: inset 0.8rem 0.8rem 1.2rem rgba(0, 0, 0, 0.05),
+          inset -0.8rem -0.8rem 1.2rem #fff;
+        --box-shadow-dark: 0.8rem 0.8rem 1.2rem rgba(0, 0, 0, 0.1),
+          -0.8rem -0.8rem 1.2rem rgba(#fff, 0.2);
+      }
+
+      html {
+        font-family: "Montserrat", "游ゴシック体", YuGothic, "游ゴシック",
+          "Yu Gothic", "メイリオ", Meiryo, sans-serif;
+        font-size: 62.5%;
+        line-height: 1.8;
+        height: 100%;
+        word-break: break-word;
+        color: #333;
+        background-color: var(--color-base);
+        -webkit-appearance: none;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      body {
+        font-size: 1.6rem;
+        margin: 0;
+      }
+
+      *,
+      *::before,
+      *::after {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+      }
+
+      ::-moz-selection {
+        color: #fff;
+        background: var(--color-theme);
+      }
+
+      ::selection {
+        color: #fff;
+        background: var(--color-theme);
+      }
+
+      img {
+        border: 0;
+        margin: 0;
+      }
+
+      figure {
+        margin: 0;
+      }
+
+      p {
+        margin: 0;
+        padding: 0;
+      }
+
+      a {
+        text-decoration: none;
+        color: #333;
+      }
+
+      ul,
+      ol {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-size: 1.6rem;
+        margin: 0;
+        padding: 0;
+      }
+
+      main {
+        display: block;
+        flex: 1;
+        padding-top: 12.2rem;
+      }
+
+      .l-wrapper {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        position: relative;
+        /* background: url(walking-next-to-people-4435214.png); */
+        background-color: rgb(210, 221, 231);
+      }
+
+      .c-loader-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgb(255, 255, 255);
+        z-index: 100;
+        display: grid;
+        place-items: center;
+        pointer-events: none;
+      }
+
+      .c-loader-dot {
+        display: inline-flex;
+        align-items: center;
+        justify-content: start;
+        pointer-events: none;
+      }
+
+      .c-loader-dot > span {
+        display: block;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #fff;
+      }
+
+      .c-loader-dot > span + span {
+        margin-left: 3rem;
+      }
+
+      .l-inner {
+        position: relative;
+        -webkit-box-sizing: content-box;
+        box-sizing: content-box;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 10rem;
+      }
+
+      .l-section {
+        border-top: 1px solid #eee;
+      }
+
+      .l-section .l-inner {
+        padding-top: 8rem;
+        padding-bottom: 8rem;
+      }
+
+      .c-temp {
+        line-height: 1;
+      }
+
+      .c-temp .l-inner {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: justify;
+        -webkit-justify-content: space-between;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding-top: 4rem;
+        padding-bottom: 4rem;
+      }
+
+      .c-temp .text {
+        font-size: 2.4rem;
+        font-weight: bold;
+      }
+
+      .c-temp .button {
+        font-size: 1.4rem;
+        font-weight: bold;
+        display: block;
+        width: 12rem;
+        padding: 1.6rem 0 1.2rem;
+        text-align: center;
+        letter-spacing: 0.1em;
+        color: #fff;
+        border-radius: 100px;
+        background-color: var(--color-theme);
+      }
+
+      .c-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+      }
+
+      .c-mv {
+        position: relative;
+        min-height: 78.3rem;
+        /* margin-left: 4rem; */
+      }
+      .c-mv img {
+        width: 100%;
+        height: auto;
+      }
+      .c-mv_bubble {
+        position: absolute;
+        z-index: -1;
+        width: 100%;
+        top: 4.4rem;
+        left: 0;
+      }
+
+      .c-mv_title-wrap {
+        padding-top: 13.7rem;
+        position: relative;
+        z-index: 10;
+        font-weight: bold;
+      }
+
+      .c-mv_title-item {
+        font-size: 4.8rem;
+        line-height: 2;
+      }
+
+      .c-mv_title-item span {
+        /* transformプロパティを有効にするため */
+        display: inline-block;
+      }
+
+      .c-mv_title-lead {
+        line-height: 2;
+        margin-top: 0.8rem;
+      }
+
+      .c-footer .l-inner {
+        padding-top: 0;
+      }
+
+      .c-footer .text {
+        color: var(--color-gray);
+      }
+
+      .c-info {
+        font-size: 1.4rem;
+        display: inline-block;
+        margin-top: 4rem;
+        margin-bottom: 6.4rem;
+      }
+
+      .c-info li {
+        position: relative;
+        padding-left: 16px;
+      }
+
+      .c-info li::before {
+        position: absolute;
+        top: 0.6em;
+        left: 0;
+        display: inline-block;
+        width: 8px;
+        height: 2px;
+        content: "";
+        background-color: var(--color-gray);
+      }
+
+      .c-info li + li {
+        margin-top: 0.8rem;
+      }
+
+      .c-title {
+        font-size: 2.4rem;
+        font-weight: bold;
+        line-height: 1.6;
+        display: inline-block;
+        min-width: 32rem;
+        margin-bottom: 6.4rem;
+        vertical-align: top;
+      }
+
+      .c-title [class*="ico-"] {
+        font-size: 1.3rem;
+        line-height: 1;
+        display: block;
+        width: 10rem;
+        margin-bottom: 1.2rem;
+        padding: 0.8rem 0 0.6rem;
+        text-align: center;
+        letter-spacing: 0.05em;
+        border-radius: 100px;
+        background-color: var(--color-gray);
+      }
+
+      .c-title .ico-advanced {
+        color: #fff;
+        background-color: #333;
+      }
+      .js-loader-dot-wrap img {
+        width: 50px;
+      }
+      @media only screen and (max-width: 599px) {
+        html {
+          font-size: 50%;
+        }
+        .pc-tab {
+          display: none !important;
+        }
+        .c-temp .button {
+          font-size: 1.2rem;
+          width: 9rem;
+        }
+        .c-title {
+          min-width: 100%;
+        }
+      }
+      @media only screen and (min-width: 1025px) {
+        .tab-sp {
+          display: none !important;
+        }
+        .c-temp .button {
+          -webkit-transition: var(--transition);
+          transition: var(--transition);
+        }
+        .c-temp .button:hover {
+          background-color: var(--color-theme-darken);
+        }
+      }
+      @media only screen and (min-width: 600px) {
+        .sp {
+          display: none !important;
+        }
+      }
+      @media only screen and (max-width: 1200px) {
+        .c-info {
+          display: block;
+          margin-top: 0;
+          margin-bottom: 6.4rem;
+        }
+        .c-title {
+          margin-bottom: 3.2rem;
+        }
+      }
+      @media only screen and (max-width: 1024px) {
+        html {
+          -webkit-text-size-adjust: 100%;
+        }
+        .l-inner {
+          padding: 0 4rem;
+        }
+        .pc {
+          display: none !important;
+        }
+        .c-temp .l-inner {
+          padding: 3.2rem;
+        }
+        .c-mv {
+          margin-left: 0;
+        }
+        main {
+          padding-top: 8.4rem;
+        }
+        .c-mv_title-item {
+          font-size: 2.4rem;
+        }
+        .c-mv_title-lead {
+          font-size: 1.4rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="l-wrapper">
+      <!-- gif -->
+      <div class="c-loader-bg js-loader-bg">
+        <div class="c-loader-dot js-loader-dot-wrap">
+          <img src="loading-l-5.gif" alt="" />
+        </div>
+      </div>
+      <!-- ヘッダー -->
+      <header class="c-header js-header">
+        <div class="c-temp">
+          <div class="l-inner">
+            <p class="text">テキスト</p>
+            <p class="link">
+              <a href="#" class="button">text</a>
+            </p>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <!-- MV -->
+        <section class="c-mv js-mv">
+          <!-- <img src="walking-next-to-people-4435214.png" /> -->
+          <div class="l-inner">
+            <!-- テキスト類 -->
+            <div class="c-mv_title-wrap">
+              <div class="c-mv_title">
+                <div class="c-mv_title-item js-mv_title-item">
+                  テキストテキストテキスト
+                </div>
+                <div class="c-mv_title-item js-mv_title-item">
+                  テキストテキストテキストテキストテキスト
+                </div>
+              </div>
+              <p class="c-mv_title-lead js-mv_title-lead">
+                テキストテキストテキストテキストテキストテキストテキストテキストテキスト
+              </p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <!-- /wrapper -->
+
+    <!-- GSAP読み込み -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.10.4/gsap.min.js"></script>
+    <script>
+      (function () {
+        "use strict";
+
+        /* 文字列を分割しspanで囲む */
+        (function () {
+          const jsText = document.querySelectorAll(".js-mv_title-item");
+          jsText.forEach((target) => {
+            let newText = "";
+            const text = target.textContent;
+            const result = text.split("");
+            for (let i = 0; i < result.length; i++) {
+              newText += "<span>" + result[i] + "</span>";
+            }
+            target.innerHTML = newText;
+          });
+        })();
+
+        /* MVアニメーション */
+        (function () {
+          /* 以下アニメーション */
+          const jsLoaderBg = ".js-loader-bg"; // カーテン（黒い背景）
+          const jsDot = ".js-loader-dot-wrap > span"; // ドット
+          const jsBubble = ".js-mv-bubble [id*=item]"; // バブル（丸い図形）
+          const jsText = ".js-mv_title-item span"; // メインビジュアルのタイトル
+          const jsLeadText = ".js-mv_title-lead"; // メインビジュアルのリード文
+          const jsHeader = ".js-header"; // ヘッダー
+
+          //初期状態をセット
+          gsap.set(
+            [jsBubble, jsText, jsLeadText],
+            //アニメーションさせない静止状態を指定する
+            {
+              opacity: 0,
+              y: 30,
+            }
+          );
+
+          /* ドット */
+          gsap.set(jsDot, {
+            opacity: 0,
+            y: -50,
+          });
+
+          /* ヘッダー */
+          gsap.set(jsHeader, {
+            opacity: 0,
+            y: -50,
+          });
+
+          gsap.set([".hoge", ".fuga", ".bar"], {
+            opacity: 0,
+          });
+
+          // timelineを作成
+          const tl = gsap.timeline();
+
+          tl.to(
+            /* ドット */
+            /* 0.8秒後に起動 */
+            jsDot,
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.8,
+              delay: 0.8,
+              stagger: {
+                amount: 0.5,
+                from: "start",
+                ease: "power4.inOut",
+              },
+            }
+          )
+            .to(
+              /* ドット */
+              /* 前のアニメーションが完了した後、ドットを消す */
+              jsDot,
+              {
+                opacity: 0,
+              }
+            )
+            .to(
+              /* カーテン */
+              /* 前のアニメーションが完了した0.5秒後に、カーテンを下へ移動 */
+              jsLoaderBg,
+              {
+                // y: "100%",
+                opacity: 0,
+              },
+              "+=0.5"
+            )
+            .to(
+              jsBubble,
+              {
+                /* バブル */
+                /* 0.2秒後に、1秒かけてバブルが個別にアニメーション */
+                opacity: 1,
+                y: 0,
+                duration: 0.8, // seconds
+                stagger: {
+                  amount: 0.6,
+                  from: "start",
+                  ease: "sine.in",
+                },
+              },
+              "+=0.2"
+            )
+            .to(
+              /* タイトル */
+              jsText,
+              {
+                /* 前のアニメーションが完了する0.1秒前に実行 */
+                opacity: 1,
+                y: 0,
+                stagger: {
+                  amount: 1,
+                  from: "start",
+                  ease: "sine.in",
+                },
+              },
+              "-=0.1"
+            )
+            .to(
+              /* リード文 */
+              jsLeadText,
+              {
+                /* 前のアニメーションが完了する0.1秒前に実行 */
+                opacity: 1,
+                y: 0,
+              },
+              "-=0.2"
+            )
+            .to(
+              /* ヘッダー */
+              /* 前のアニメーションと同時 */
+              jsHeader,
+              {
+                opacity: 1,
+                y: 0,
+              },
+              "<"
+            );
+        })();
+      })();
+    </script>
+  </body>
+</html>
